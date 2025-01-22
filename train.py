@@ -26,6 +26,9 @@ def train(model, trainloader, criterion, optimizer, scheduler, device, epoch):
     train_loss_meter = AverageMeter()
     train_acc_meter = AverageMeter()
 
+    if device.type == 'cuda':
+        torch.cuda.reset_peak_memory_stats(device)
+
     for i, (inputs, labels) in enumerate(trainloader, 0):
         inputs, labels = inputs.to(device), labels.to(device)
 
