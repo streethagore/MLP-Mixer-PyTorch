@@ -87,7 +87,7 @@ if __name__ == "__main__":
         image_shape=(3, 32, 32),
         patch_size=4,
         num_classes=10,
-        num_mixers=4,
+        num_mixers=8,
         num_features=256,
         hidden_dim_token=64,
         hidden_dim_channel=512,
