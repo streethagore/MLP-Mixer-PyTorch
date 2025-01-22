@@ -94,6 +94,7 @@ if __name__ == "__main__":
         dropout=0.0
     )
     print(model)
+    print(f'Total number of parameters: {sum(p.numel() for p in model.parameters())}')
     device = torch.device(args.device if torch.cuda.is_available() else 'cpu')
     model = model.to(device)
 
