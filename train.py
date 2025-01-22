@@ -76,7 +76,7 @@ if __name__ == "__main__":
     args = parse_args()
     print('Training MLP-Mixer on CIFAR-10 with the following configurations:')
     for arg in vars(args):
-        print(f'{arg}: {getattr(args, arg)}')
+        print(f'\t{arg}: {getattr(args, arg)}')
 
     trainloader, testloader = get_dataloaders(args.batch_size, args.num_workers, args.augmentation)
 
