@@ -89,8 +89,8 @@ if __name__ == "__main__":
         num_classes=10,
         num_mixers=8,
         num_features=128,
-        hidden_dim_token=512,
-        hidden_dim_channel=64,
+        hidden_dim_token=64,
+        hidden_dim_channel=512,
         dropout=0.0
     )
     print(model)
