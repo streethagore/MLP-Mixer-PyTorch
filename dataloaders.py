@@ -25,6 +25,7 @@ def get_transforms(augmentation):
     ])
     return transform_train, transform_test
 
+
 # Load CIFAR-10 dataset
 def get_dataloaders(batch_size, num_workers, augmentation):
     transform_train, transform_test = get_transforms(augmentation)
