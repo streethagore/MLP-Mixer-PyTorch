@@ -50,9 +50,11 @@ def train(model, trainloader, criterion, optimizer, scheduler, device, epoch):
     if device.type == 'cuda':
         allocated_memory = torch.cuda.max_memory_allocated(device) / (1024 ** 3)
         reserved_memory = torch.cuda.max_memory_reserved(device) / (1024 ** 3)
-        print(f'[Epoch {epoch + 1}] -- Train Loss: {train_loss_meter.average:.3f} -- Train Accuracy: {train_acc_meter.average:.3f} -- Allocated Memory: {allocated_memory:.2f} GB -- Reserved Memory: {reserved_memory:.2f} GB')
+        print(
+            f'[Epoch {epoch + 1}] -- Train Loss: {train_loss_meter.average:.3f} -- Train Accuracy: {train_acc_meter.average:.3f} -- Allocated Memory: {allocated_memory:.2f} GB -- Reserved Memory: {reserved_memory:.2f} GB')
     else:
-        print(f'[Epoch {epoch + 1}] -- Train Loss: {train_loss_meter.average:.3f} -- Train Accuracy: {train_acc_meter.average:.3f}')
+        print(
+            f'[Epoch {epoch + 1}] -- Train Loss: {train_loss_meter.average:.3f} -- Train Accuracy: {train_acc_meter.average:.3f}')
     scheduler.epoch_step()
 
 
@@ -76,6 +78,10 @@ def test(model, testloader, criterion, device):
 
 
 if __name__ == "__main__":
+    import time
+
+    start_time = time.time()
+
     args = parse_args()
     print('Training MLP-Mixer on CIFAR-10 with the following configurations:')
     for arg in vars(args):
@@ -108,4 +114,6 @@ if __name__ == "__main__":
         train(model, trainloader, criterion, optimizer, scheduler, device, epoch)
         test(model, testloader, criterion, device)
 
-    print('Finished Training')
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    print(f'Finished Training in {elapsed_time:.2f} seconds')
