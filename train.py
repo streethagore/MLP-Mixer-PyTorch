@@ -48,8 +48,8 @@ def train(model, trainloader, criterion, optimizer, scheduler, device, epoch):
         train_acc_meter.update(accuracy, inputs.size(0))
 
     if device.type == 'cuda':
-        allocated_memory = torch.cuda.memory_allocated(device) / (1024 ** 3)
-        reserved_memory = torch.cuda.memory_reserved(device) / (1024 ** 3)
+        allocated_memory = torch.cuda.max_memory_allocated(device) / (1024 ** 3)
+        reserved_memory = torch.cuda.max_memory_reserved(device) / (1024 ** 3)
         print(f'[Epoch {epoch + 1}] -- Train Loss: {train_loss_meter.average:.3f} -- Train Accuracy: {train_acc_meter.average:.3f} -- Allocated Memory: {allocated_memory:.2f} GB -- Reserved Memory: {reserved_memory:.2f} GB')
     else:
         print(f'[Epoch {epoch + 1}] -- Train Loss: {train_loss_meter.average:.3f} -- Train Accuracy: {train_acc_meter.average:.3f}')
