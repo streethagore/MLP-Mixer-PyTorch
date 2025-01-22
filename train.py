@@ -88,13 +88,13 @@ if __name__ == "__main__":
         patch_size=4,
         num_classes=10,
         num_mixers=8,
-        num_features=256,
+        num_features=128,
         hidden_dim_token=64,
         hidden_dim_channel=512,
         dropout=0.0
     )
     print(model)
-    print(f'Total number of parameters: {sum(p.numel() for p in model.parameters())}')
+    print(f'Total number of parameters: {sum(p.numel() for p in model.parameters()) / 1e6:.2f}M')
     device = torch.device(args.device if torch.cuda.is_available() else 'cpu')
     model = model.to(device)
 
