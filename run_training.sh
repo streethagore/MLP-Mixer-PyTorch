@@ -19,6 +19,6 @@ command+=" --lr 1e-3"
 command+=" --weight_decay 5e-5"
 command+=" --num_workers 4"
 command+=" --device cuda"
-command+=" --augmentation autoaugment"
+command+=" --augmentation randaugment"
 
 eval "$command"
