@@ -27,9 +27,6 @@ def train(model, trainloader, criterion, optimizer, scheduler, device, epoch):
     train_loss_meter = AverageMeter()
     train_acc_meter = AverageMeter()
 
-    if device.type == 'cuda':
-        torch.cuda.reset_peak_memory_stats(device)
-
     for i, (inputs, labels) in enumerate(trainloader, 0):
         inputs, labels = inputs.to(device), labels.to(device)
 
@@ -58,6 +55,8 @@ def train(model, trainloader, criterion, optimizer, scheduler, device, epoch):
             f'[Epoch {epoch + 1}] -- Train Loss: {train_loss_meter.average:.3f} -- Train Accuracy: {train_acc_meter.average:.3f}')
     scheduler.epoch_step()
 
+    return train_loss_meter.average, train_acc_meter.average
+
 
 # Testing function
 def test(model, testloader, criterion, device):
@@ -76,6 +75,7 @@ def test(model, testloader, criterion, device):
             test_acc_meter.update(accuracy, inputs.size(0))
 
     print(f'Test Loss: {test_loss_meter.average:.3f} -- Test Accuracy: {test_acc_meter.average:.3f}')
+    return test_loss_meter.average, test_acc_meter.average
 
 
 if __name__ == "__main__":
@@ -111,10 +111,17 @@ if __name__ == "__main__":
     scheduler = WarmupCosineLR(
         optimizer, warmup_epochs=5, total_epochs=args.epochs, num_batches_per_epoch=len(trainloader), min_lr=1e-6
     )
+    print(f"Optimizer: {optimizer}")
+    print(f"Scheduler: {scheduler}")
 
     for epoch in range(args.epochs):
-        train(model, trainloader, criterion_train, optimizer, scheduler, device, epoch)
-        test(model, testloader, criterion_test, device)
+        if device.type == 'cuda':
+            torch.cuda.reset_peak_memory_stats(device)
+        train_loss, train_acc = train(model, trainloader, criterion_train, optimizer, scheduler, device, epoch)
+        test_loss, test_acc = test(model, testloader, criterion_test, device)
+        print(f"Epoch [{epoch + 1}/{args.epochs}] -- Loss: {test_loss:.3f} ({train_acc:.3f}) -- Accuracy: {train_acc*100:.3f}% ({test_acc*100:.3f}%) [lr: {optimizer.param_groups[0]['lr']:.6f}]")
+        if device.type == 'cuda':
+            print(f"Peak memory allocated: {torch.cuda.max_memory_allocated(device) / (1024 ** 3):.2f} GB -- Peak memory reserved: {torch.cuda.max_memory_reserved(device) / (1024 ** 3):.2f} GB")
 
     end_time = time.time()
     elapsed_time = end_time - start_time
