@@ -33,5 +33,5 @@ def get_dataloaders(batch_size, num_workers, augmentation):
     trainloader = DataLoader(trainset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
 
     testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform_test)
-    testloader = DataLoader(testset, batch_size=100, shuffle=False, num_workers=num_workers)
+    testloader = DataLoader(testset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
     return trainloader, testloader
