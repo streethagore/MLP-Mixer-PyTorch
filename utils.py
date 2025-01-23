@@ -49,7 +49,8 @@ class WarmupCosineLR:
         if self.current_epoch < self.warmup_epochs:
             lr = self.base_lr * (self.current_step / (self.warmup_epochs * self.num_batches_per_epoch))
         else:
-            progress = (self.current_epoch - self.warmup_epochs) / (self.total_epochs - self.warmup_epochs)
+            progress = ((self.current_step - self.warmup_epochs * self.num_batches_per_epoch) /
+                        ((self.total_epochs - self.warmup_epochs) * self.num_batches_per_epoch))
             lr = self.min_lr + 0.5 * (self.base_lr - self.min_lr) * (1 + np.cos(np.pi * progress))
 
         for param_group in self.optimizer.param_groups:

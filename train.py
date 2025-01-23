@@ -106,7 +106,7 @@ if __name__ == "__main__":
     model = model.to(device)
 
     criterion_train = LabelSmoothingLoss(smoothing=0.1)
-    criterion_test = torch.nn.CrossEntropyLoss()
+    criterion_test = torch.nn.CrossEntropyLoss(reduction='mean')
     optimizer = get_optimizer(model, args.optimizer, args.lr, args.weight_decay)
     scheduler = WarmupCosineLR(
         optimizer, warmup_epochs=5, total_epochs=args.epochs, num_batches_per_epoch=len(trainloader), min_lr=1e-6
