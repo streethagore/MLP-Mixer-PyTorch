@@ -52,11 +52,11 @@ class WarmupCosineLR:
 
     def step(self):
         self.current_step += 1
+        minibatch_step = self.current_step + self.current_epoch * self.num_batches_per_epoch
         if self.current_epoch < self.warmup_epochs:
-            current_step = self.current_step + self.current_epoch * self.num_batches_per_epoch
-            lr = self.base_lr * (current_step / (self.warmup_epochs * self.num_batches_per_epoch))
+            lr = self.base_lr * (minibatch_step / (self.warmup_epochs * self.num_batches_per_epoch))
         else:
-            progress = ((self.current_step - self.warmup_epochs * self.num_batches_per_epoch) /
+            progress = ((minibatch_step - self.warmup_epochs * self.num_batches_per_epoch) /
                         ((self.total_epochs - self.warmup_epochs) * self.num_batches_per_epoch))
             lr = self.min_lr + 0.5 * (self.base_lr - self.min_lr) * (1 + np.cos(np.pi * progress))
 
