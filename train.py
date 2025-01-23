@@ -119,7 +119,7 @@ if __name__ == "__main__":
             torch.cuda.reset_peak_memory_stats(device)
         train_loss, train_acc = train(model, trainloader, criterion_train, optimizer, scheduler, device, epoch)
         test_loss, test_acc = test(model, testloader, criterion_test, device)
-        print(f"Epoch [{epoch + 1}/{args.epochs}] -- Loss: {test_loss:.3f} ({train_acc:.3f}) -- Accuracy: {train_acc*100:.3f}% ({test_acc*100:.3f}%) [lr: {optimizer.param_groups[0]['lr']:.6f}]")
+        print(f"Epoch [{epoch + 1}/{args.epochs}] -- Loss: {test_loss:.3f} ({train_loss:.3f}) -- Accuracy: {train_acc*100:.3f}% ({test_acc*100:.3f}%) [lr: {optimizer.param_groups[0]['lr']:.6f}]")
         if device.type == 'cuda':
             print(f"Peak memory allocated: {torch.cuda.max_memory_allocated(device) / (1024 ** 3):.2f} GB -- Peak memory reserved: {torch.cuda.max_memory_reserved(device) / (1024 ** 3):.2f} GB")
 
