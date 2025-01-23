@@ -15,7 +15,7 @@ conda activate gromo
 command="python train.py"
 command+=" --batch_size 128"
 command+=" --epochs 300"
-command+=" --optimizer adam"
+command+=" --optimizer adamw"
 command+=" --lr 1e-3"
 command+=" --weight_decay 5e-5"
 command+=" --num_workers 4"
