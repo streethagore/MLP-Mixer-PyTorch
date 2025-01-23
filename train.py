@@ -11,6 +11,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Train MLP-Mixer on CIFAR-10')
     parser.add_argument('--batch_size', type=int, default=128, help='Batch size for training and testing')
     parser.add_argument('--epochs', type=int, default=300, help='Number of epochs to train')
+    parser.add_argument('--optimizer', type=str, default='adam', choices=['adam', 'adamw', 'sgd'], help='Optimizer to use')
     parser.add_argument('--lr', type=float, default=1e-3, help='Learning rate')
     parser.add_argument('--weight_decay', type=float, default=5e-5, help='Weight decay for optimizer')
     parser.add_argument('--num_workers', type=int, default=0, help='Number of workers for data loading')
@@ -105,7 +106,7 @@ if __name__ == "__main__":
     model = model.to(device)
 
     criterion = LabelSmoothingLoss(smoothing=0.1)
-    optimizer = get_optimizer(model, args.lr, args.weight_decay)
+    optimizer = get_optimizer(model, args.optimizer, args.lr, args.weight_decay)
     scheduler = WarmupCosineLR(
         optimizer, warmup_epochs=5, total_epochs=args.epochs, num_batches_per_epoch=len(trainloader), min_lr=1e-6
     )

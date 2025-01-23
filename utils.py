@@ -22,8 +22,15 @@ class LabelSmoothingLoss(nn.Module):
         return loss.mean()
 
 # Optimizer
-def get_optimizer(model, lr, weight_decay):
-    return optim.Adam(model.parameters(), lr=lr, betas=(0.9, 0.99), weight_decay=weight_decay)
+def get_optimizer(model, optimizer_name, lr, weight_decay):
+    if optimizer_name == 'adam':
+        return optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
+    elif optimizer_name == 'adamw':
+        return optim.AdamW(model.parameters(), lr=lr, betas=(0.9, 0.99), weight_decay=weight_decay)
+    elif optimizer_name == 'sgd':
+        return optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=weight_decay)
+    else:
+        raise ValueError(f'Unknown optimizer: {optimizer_name}')
 
 # Learning rate scheduler
 class WarmupCosineLR:
