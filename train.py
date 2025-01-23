@@ -101,19 +101,20 @@ if __name__ == "__main__":
         dropout=0.0
     )
     print(model)
-    print(f'Total number of parameters: {sum(p.numel() for p in model.parameters()): ,}')
+    print(f'Total number of parameters: {sum(p.numel() for p in model.parameters() if p.requires_grad): ,}')
     device = torch.device(args.device if torch.cuda.is_available() else 'cpu')
     model = model.to(device)
 
-    criterion = LabelSmoothingLoss(smoothing=0.1)
+    criterion_train = LabelSmoothingLoss(smoothing=0.1)
+    criterion_test = torch.nn.CrossEntropyLoss()
     optimizer = get_optimizer(model, args.optimizer, args.lr, args.weight_decay)
     scheduler = WarmupCosineLR(
         optimizer, warmup_epochs=5, total_epochs=args.epochs, num_batches_per_epoch=len(trainloader), min_lr=1e-6
     )
 
     for epoch in range(args.epochs):
-        train(model, trainloader, criterion, optimizer, scheduler, device, epoch)
-        test(model, testloader, criterion, device)
+        train(model, trainloader, criterion_train, optimizer, scheduler, device, epoch)
+        test(model, testloader, criterion_test, device)
 
     end_time = time.time()
     elapsed_time = end_time - start_time
