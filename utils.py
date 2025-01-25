@@ -1,5 +1,4 @@
 # Description: Contains utility functions and classes
-
 import numpy as np
 import torch
 import torch.nn as nn
@@ -21,6 +20,7 @@ class LabelSmoothingLoss(nn.Module):
         loss = confidence * nll_loss + self.smoothing * smooth_loss
         return loss.mean()
 
+
 # Optimizer
 def get_optimizer(model, optimizer_name, lr, weight_decay):
     if optimizer_name == 'adam':
@@ -32,40 +32,6 @@ def get_optimizer(model, optimizer_name, lr, weight_decay):
     else:
         raise ValueError(f'Unknown optimizer: {optimizer_name}')
 
-# Learning rate scheduler
-class WarmupCosineLR:
-    def __init__(self, optimizer, warmup_epochs, total_epochs, num_batches_per_epoch, min_lr=1e-6):
-        self.optimizer = optimizer
-        self.warmup_epochs = warmup_epochs
-        self.total_epochs = total_epochs
-        self.num_batches_per_epoch = num_batches_per_epoch
-        self.min_lr = min_lr
-        self.base_lr = optimizer.param_groups[0]['lr']
-        self.current_epoch = 0
-        self.current_step = 0
-
-    def __repr__(self):
-        return self.__str__()
-
-    def __str__(self):
-        return f"CosineScheduler(base_lr={self.base_lr}, min_lr={self.min_lr}, warmup_epochs={self.warmup_epochs}, total_epochs={self.total_epochs})"
-
-    def step(self):
-        self.current_step += 1
-        minibatch_step = self.current_step + self.current_epoch * self.num_batches_per_epoch
-        if self.current_epoch < self.warmup_epochs:
-            lr = self.base_lr * (minibatch_step / (self.warmup_epochs * self.num_batches_per_epoch))
-        else:
-            progress = ((minibatch_step - self.warmup_epochs * self.num_batches_per_epoch) /
-                        ((self.total_epochs - self.warmup_epochs) * self.num_batches_per_epoch))
-            lr = self.min_lr + 0.5 * (self.base_lr - self.min_lr) * (1 + np.cos(np.pi * progress))
-
-        for param_group in self.optimizer.param_groups:
-            param_group['lr'] = lr
-
-    def epoch_step(self):
-        self.current_epoch += 1
-        self.current_step = 0
 
 # AverageMeter class to keep track of losses and accuracies
 class AverageMeter:
@@ -84,6 +50,7 @@ class AverageMeter:
     def average(self):
         return self.sum / self.count
 
+
 # CutMix function
 def cutmix_data(x, y, beta=1.0, cutmix_prob=0.5):
     if np.random.rand() > cutmix_prob:
@@ -98,6 +65,7 @@ def cutmix_data(x, y, beta=1.0, cutmix_prob=0.5):
     x[:, :, bbx1:bbx2, bby1:bby2] = shuffled_x[:, :, bbx1:bbx2, bby1:bby2]
 
     return x, y, shuffled_y, lam
+
 
 def rand_bbox(size, lam):
     W = size[2]

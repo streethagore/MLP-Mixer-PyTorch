@@ -18,6 +18,7 @@ class MLP_Block(nn.Module):
         x = self.dropout(x)
         return x
 
+
 class Token_Mixer(nn.Module):
     def __init__(self, num_patches, num_channels, hidden_dim, dropout):
         super(Token_Mixer, self).__init__()

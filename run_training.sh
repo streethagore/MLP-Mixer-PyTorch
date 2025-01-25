@@ -13,10 +13,11 @@ conda activate gromo
 
 # Run the training script
 command="python train.py"
-command+=" --batch_size 128"
-command+=" --epochs 300"
-command+=" --optimizer sgd"
+command+=" --batch_size $1"
+command+=" --epochs $2"
+command+=" --optimizer $3"
 command+=" --lr 1e-3"
+command+=" --scheduler $4"
 command+=" --weight_decay 5e-5"
 command+=" --num_workers 4"
 command+=" --device cuda"
