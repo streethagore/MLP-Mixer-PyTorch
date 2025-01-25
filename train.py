@@ -1,4 +1,6 @@
 import argparse
+import sys
+
 import torch
 
 from mlp_mixer import MlpMixer
@@ -86,9 +88,9 @@ if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
 
     # Console handler
-    consoleHandler = logging.StreamHandler()
+    consoleHandler = logging.StreamHandler(sys.stdout)
     consoleHandler.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     consoleHandler.setFormatter(formatter)
     logger.addHandler(consoleHandler)
 
@@ -110,10 +112,10 @@ if __name__ == "__main__":
         image_shape=(3, 32, 32),
         patch_size=4,
         num_classes=10,
-        num_mixers=8,
+        num_mixers=1,
         num_features=128,
-        hidden_dim_token=64,
-        hidden_dim_channel=512,
+        hidden_dim_token=8,
+        hidden_dim_channel=32,
         dropout=0.0
     )
     logger.info(model)
@@ -151,7 +153,7 @@ if __name__ == "__main__":
         test_time = test_end_time - test_start_time
 
         logger.info(
-            f"Epoch [{epoch + 1}/{args.epochs}] [lr: {optimizer.param_groups[0]['lr']:.6f}]"
+            f"Epoch [{epoch + 1}/{args.epochs}] [lr: {optimizer.param_groups[0]['lr']:1.2e}]"
             f" -- Loss: {test_loss:.3f} ({train_loss:.3f})"
             f" -- Accuracy: {test_acc * 100:.3f}% ({train_acc * 100:.3f}%)"
             f" -- duration: {test_time:.2f}s ({train_time:.2f}s)"
