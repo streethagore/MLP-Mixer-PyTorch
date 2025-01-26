@@ -112,10 +112,10 @@ if __name__ == "__main__":
         image_shape=(3, 32, 32),
         patch_size=4,
         num_classes=10,
-        num_mixers=1,
+        num_mixers=8,
         num_features=128,
-        hidden_dim_token=8,
-        hidden_dim_channel=32,
+        hidden_dim_token=64,
+        hidden_dim_channel=512,
         dropout=0.0
     )
     logger.info(model)
